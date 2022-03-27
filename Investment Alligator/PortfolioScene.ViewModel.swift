@@ -1,0 +1,139 @@
+//
+//  PortfolioViewModel.swift
+//  Investment Alligator
+//
+//  Created by John Reid on 13/3/2022.
+//
+
+import Foundation
+import Combine
+
+extension PortfolioScene {
+    
+    class ViewModel: ObservableObject {
+        
+        private var subscribers = Set<AnyCancellable>()
+        
+        @Published var allocations: [AllocationViewModel] = []
+        
+        var total: Decimal {
+            return allocations.compactMap{ $0.value }.reduce(0, +)
+        }
+        
+        var formattedTotal: String {
+            NumberFormatter.currency.string(from: total as NSNumber) ?? "-"
+        }
+        
+        var request: URLRequest {
+            YahooFinanceRepository.quoteRequest(symbols: allocations.compactMap{ $0.name })
+        }
+        
+        func addAllocation(name: String, targetPercentage: Decimal, units: Int) {
+            allocations.append(
+                AllocationViewModel(
+                    name: name,
+                    targetPercentage: targetPercentage,
+                    units: units
+                )
+            )
+            fetchRequest()
+            mapDifferences()
+        }
+        
+        func fetchRequest() {
+            YahooFinanceRepository.publisher(request: request)
+                .map { Self.mapQuotes(allocations: self.allocations, response: $0) }
+                .receive(on: DispatchQueue.main)
+                .sink { completion in
+                    switch completion {
+                    case .finished:
+                        debugPrint("finished")
+                    case .failure(let error):
+                        debugPrint("error = \(error.localizedDescription)")
+                    }
+                } receiveValue: { self.allocations = $0 }
+                .store(in: &subscribers)
+        }
+        
+        static func mapQuotes(allocations: [AllocationViewModel], response: YahooFinanceResponse) -> [AllocationViewModel] {
+            return allocations.compactMap { allocation in
+                guard let result = response.quoteResponse.result.first(where: { $0.symbol == allocation.name })
+                else { return allocation }
+                return AllocationViewModel(
+                    name: allocation.name,
+                    targetPercentage: allocation.targetPercentage,
+                    units: allocation.units,
+                    price: result.regularMarketPrice,
+                    difference: allocation.difference
+                )
+            }
+        }
+        
+        func mapDifferences() {
+            let newAllocations: [AllocationViewModel] = allocations.map { allocation in
+//                let otherTotal = self.total - allocation.value
+//                let otherPercentage = 100 - allocation.targetPercentage
+//                let difference = (otherTotal / otherPercentage) * allocation.targetPercentage
+                let difference = self.total * (allocation.targetPercentage/100) - allocation.value
+                return AllocationViewModel(
+                    name: allocation.name,
+                    targetPercentage: allocation.targetPercentage,
+                    units: allocation.units,
+                    price: allocation.price,
+                    difference: difference
+                )
+            }
+            allocations = newAllocations
+        }
+    }
+    
+    class AllocationViewModel: Identifiable {
+        var name: String
+        var targetPercentage: Decimal
+        var units: Int
+        var price: Decimal?
+        var difference: Decimal?
+        
+        public init(
+            name: String,
+            targetPercentage: Decimal,
+            units: Int,
+            price: Decimal? = nil,
+            difference: Decimal? = nil
+        ) {
+            self.name = name
+            self.targetPercentage = targetPercentage
+            self.units = units
+            self.price = price
+            self.difference = difference
+        }
+        
+        public var value: Decimal {
+            guard let price = price else {
+                return 0
+            }
+            return price * Decimal(units)
+        }
+        
+        public var formattedName: String {
+            name.components(separatedBy: ".")[0]
+        }
+        
+        public var formattedTargetPercentage: String {
+            (NumberFormatter.decimal.string(from: targetPercentage as NSNumber) ?? "") + "%"
+        }
+        
+        public var formattedValue: String {
+            guard let formattedValue = NumberFormatter.currency.string(from: value as NSNumber)
+            else { return "-" }
+            return formattedValue
+        }
+        
+        public var formattedDifference: String {
+            guard let difference = difference as? NSNumber,
+                  let formattedDifference = NumberFormatter.currency.string(from: difference)
+            else { return "-" }
+            return formattedDifference
+        }
+    }
+}
