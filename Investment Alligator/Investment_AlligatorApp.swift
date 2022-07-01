@@ -11,7 +11,9 @@ import SwiftUI
 struct Investment_AlligatorApp: App {
     var body: some Scene {
         WindowGroup {
-            PortfolioScene()
+            NavigationView {
+                PortfolioScene()
+            }
         }
     }
 }

@@ -13,9 +13,8 @@
 		5289608027DDBA6F002012FE /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5289607F27DDBA6F002012FE /* Preview Assets.xcassets */; };
 		5289608927DDBB5C002012FE /* PortfolioScene.ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5289608827DDBB5C002012FE /* PortfolioScene.ViewModel.swift */; };
 		52E59E1127E36AF2002F8885 /* NumberFormatter+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E59E1027E36AF2002F8885 /* NumberFormatter+Extensions.swift */; };
-		52E59E1327E86B7D002F8885 /* YahooFinanceRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E59E1227E86B7D002F8885 /* YahooFinanceRepository.swift */; };
+		52E59E1327E86B7D002F8885 /* YahooFinanceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E59E1227E86B7D002F8885 /* YahooFinanceService.swift */; };
 		52E59E1527E8769C002F8885 /* QuoteResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E59E1427E8769C002F8885 /* QuoteResponse.swift */; };
-		52E59E1727E87E97002F8885 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E59E1627E87E97002F8885 /* Strings.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,9 +25,8 @@
 		5289607F27DDBA6F002012FE /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		5289608827DDBB5C002012FE /* PortfolioScene.ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioScene.ViewModel.swift; sourceTree = "<group>"; };
 		52E59E1027E36AF2002F8885 /* NumberFormatter+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NumberFormatter+Extensions.swift"; sourceTree = "<group>"; };
-		52E59E1227E86B7D002F8885 /* YahooFinanceRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YahooFinanceRepository.swift; sourceTree = "<group>"; };
+		52E59E1227E86B7D002F8885 /* YahooFinanceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YahooFinanceService.swift; sourceTree = "<group>"; };
 		52E59E1427E8769C002F8885 /* QuoteResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuoteResponse.swift; sourceTree = "<group>"; };
-		52E59E1627E87E97002F8885 /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,8 +59,7 @@
 		5289607727DDBA6D002012FE /* Investment Alligator */ = {
 			isa = PBXGroup;
 			children = (
-				52E59E1627E87E97002F8885 /* Strings.swift */,
-				52E59E1227E86B7D002F8885 /* YahooFinanceRepository.swift */,
+				52E59E1227E86B7D002F8885 /* YahooFinanceService.swift */,
 				5289607827DDBA6D002012FE /* Investment_AlligatorApp.swift */,
 				5289607A27DDBA6D002012FE /* PortfolioScene.swift */,
 				5289607C27DDBA6F002012FE /* Assets.xcassets */,
@@ -156,9 +153,8 @@
 				52E59E1127E36AF2002F8885 /* NumberFormatter+Extensions.swift in Sources */,
 				5289607B27DDBA6D002012FE /* PortfolioScene.swift in Sources */,
 				5289607927DDBA6D002012FE /* Investment_AlligatorApp.swift in Sources */,
-				52E59E1327E86B7D002F8885 /* YahooFinanceRepository.swift in Sources */,
+				52E59E1327E86B7D002F8885 /* YahooFinanceService.swift in Sources */,
 				52E59E1527E8769C002F8885 /* QuoteResponse.swift in Sources */,
-				52E59E1727E87E97002F8885 /* Strings.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

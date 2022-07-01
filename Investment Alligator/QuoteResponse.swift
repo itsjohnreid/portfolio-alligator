@@ -13,15 +13,19 @@ struct YahooFinanceResponse: Decodable {
     
     struct QuoteResponse: Decodable {
         
-        let result: [Result]
+        let quotes: [Quote]
         
-        struct Result: Decodable {
+        struct Quote: Decodable {
             let region: String
             let regularMarketPrice: Decimal
             let exchange: String
             let shortName: String
             let longName: String
             let symbol: String
+        }
+        
+        private enum CodingKeys: String, CodingKey {
+            case quotes = "result"
         }
     }
 }

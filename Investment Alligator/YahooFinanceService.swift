@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-enum YahooFinanceRepository {
+enum YahooFinanceService {
     
     static func quoteRequest(symbols: [String]) -> URLRequest {
         let symbolString = symbols.joined(separator: ",")
@@ -24,7 +24,7 @@ enum YahooFinanceRepository {
         endURLPath: String,
         queryItems: [URLQueryItem]
     ) -> URLRequest {
-        let apiKey = "VMzx83gPWDaegLHVnLiZcawXPs1OKSCb58lL1MR7"
+        let apiKey = "TQhWr8g1df8TSAa8EUHVC2CmyJA0ueKh8gRLDFEn"
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
         urlComponents.host = "yfapi.net"

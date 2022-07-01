@@ -16,42 +16,88 @@ struct PortfolioScene: View {
     @State var units = ""
     
     var body: some View {
-        NavigationView {
-            VStack {
-                List {
-                    headerRow
-                    ForEach(viewModel.allocations) { allocation in
-                        allocationRow(allocation)
-                    }
-                    HStack {
-                        Spacer()
-                        Button("+") {
-                            viewModel.addAllocation(
-                                name: ticker,
-                                targetPercentage: Decimal(string: percentage) ?? 0,
-                                units: Int(units) ?? 0)
-                        }
-                        .buttonStyle(.automatic)
-                        Spacer()
-                    }
+        VStack {
+            allocationList
+            bottomBar
+        }
+        .navigationTitle("Investment Alligator")
+    }
+    
+    var allocationList: some View {
+        List {
+            Section(header: header) {
+                labelRow
+                ForEach(viewModel.allocations) { allocation in
+                    allocationRow(allocation)
                 }
-                TextField("Ticker", text: $ticker)
-                TextField("Percentage", text: $percentage)
-                TextField("Units", text: $units)
-                Text(String(format: Strings.footer, viewModel.formattedTotal))
-                    .font(.headline)
-                    .fontWeight(.bold)
+                .onDelete(perform: viewModel.deleteAllocation)
             }
-            .navigationTitle(Text(Strings.title))
+        }
+        .listStyle(.plain)
+    }
+    
+    var header: some View {
+        HStack {
+            Group {
+                Text("Total Portfolio:")
+                    .foregroundColor(Color.secondary)
+                Text(viewModel.formattedTotal)
+                    .foregroundColor(Color.primary)
+                    .bold()
+            }
+            .font(.title3)
         }
     }
     
     @ViewBuilder
+    var bottomBar: some View {
+        Divider()
+        HStack {
+            Group {
+                TextField("Symbol", text: $ticker)
+                    .textInputAutocapitalization(.characters)
+                    .keyboardType(.emailAddress)
+                TextField("Target %", text: $percentage)
+                    .keyboardType(.numberPad)
+                TextField("Units", text: $units)
+                    .keyboardType(.numberPad)
+            }
+            .textFieldStyle(.roundedBorder)
+            addAllocationButton
+        }
+        .padding()
+        Spacer()
+    }
+    
+    var addAllocationButton: some View {
+        Button {
+            viewModel.addAllocation(
+                name: ticker,
+                targetPercentage: Decimal(string: percentage) ?? 0,
+                units: Int(units) ?? 0)
+        } label: {
+            Text("+")
+                .bold()
+                .font(.title)
+                .padding(.horizontal, 16)
+        }
+        .buttonStyle(.automatic)
+    }
+    
+    var labelRow: some View {
+        row(
+            name: headerText("Name"),
+            target: headerText("Target"),
+            units: headerText("Units"),
+            value: headerText("Value")
+        )
+    }
+    
     func allocationRow(_ allocation: AllocationViewModel) -> some View {
         VStack {
             row(
                 name: Text(allocation.formattedName)
-                    .fontWeight(.bold),
+                    .bold(),
                 target: Text(allocation.formattedTargetPercentage),
                 units: Text(String(allocation.units)),
                 value: Text(allocation.formattedValue)
@@ -64,16 +110,6 @@ struct PortfolioScene: View {
         }
     }
     
-    var headerRow: some View {
-        row(
-            name: headerText("Name"),
-            target: headerText("Target"),
-            units: headerText("Units"),
-            value: headerText("Value")
-        )
-    }
-    
-    @ViewBuilder
     func row(
         name: Text,
         target: Text,
@@ -85,15 +121,14 @@ struct PortfolioScene: View {
                 .frame(minWidth: 60, alignment: .leading)
             target
                 .frame(minWidth: 50, alignment: .leading)
-            Spacer()
             units
-                .frame(minWidth: 60, alignment: .leading)
+                .frame(minWidth: 50, alignment: .leading)
+            Spacer()
             value
-                .frame(minWidth: 100, alignment: .trailing)
+                .frame(minWidth: 140, alignment: .trailing)
         }
     }
     
-    @ViewBuilder
     func headerText(_ string: String) -> Text {
         Text(string)
             .foregroundColor(Color.secondary)
@@ -102,13 +137,15 @@ struct PortfolioScene: View {
     
     @ViewBuilder
     func differenceText(_ string: String) -> some View {
-        if string.hasPrefix("-") {
-            Text("\(string) under")
-                .fontWeight(.bold)
+        if string == "" {
+            EmptyView()
+        } else if string.hasPrefix("-") {
+            Text("\(String(string.dropFirst(1))) under")
+                .bold()
                 .foregroundColor(Color.orange)
         } else {
             Text("\(string) over")
-                .fontWeight(.bold)
+                .bold()
                 .foregroundColor(Color.blue)
         }
     }

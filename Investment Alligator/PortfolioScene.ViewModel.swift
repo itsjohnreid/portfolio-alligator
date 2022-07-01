@@ -12,7 +12,7 @@ extension PortfolioScene {
     
     class ViewModel: ObservableObject {
         
-        private var subscribers = Set<AnyCancellable>()
+        private var subscribers: Set<AnyCancellable> = []
         
         @Published var allocations: [AllocationViewModel] = []
         
@@ -25,7 +25,7 @@ extension PortfolioScene {
         }
         
         var request: URLRequest {
-            YahooFinanceRepository.quoteRequest(symbols: allocations.compactMap{ $0.name })
+            YahooFinanceService.quoteRequest(symbols: allocations.compactMap{ $0.name })
         }
         
         func addAllocation(name: String, targetPercentage: Decimal, units: Int) {
@@ -37,11 +37,14 @@ extension PortfolioScene {
                 )
             )
             fetchRequest()
-            mapDifferences()
+        }
+        
+        func deleteAllocation(at offsets: IndexSet) {
+            allocations.remove(atOffsets: offsets)
         }
         
         func fetchRequest() {
-            YahooFinanceRepository.publisher(request: request)
+            YahooFinanceService.publisher(request: request)
                 .map { Self.mapQuotes(allocations: self.allocations, response: $0) }
                 .receive(on: DispatchQueue.main)
                 .sink { completion in
@@ -51,13 +54,20 @@ extension PortfolioScene {
                     case .failure(let error):
                         debugPrint("error = \(error.localizedDescription)")
                     }
-                } receiveValue: { self.allocations = $0 }
+                } receiveValue: {
+                    self.allocations = $0
+                    self.mapDifferences()
+                }
                 .store(in: &subscribers)
         }
         
         static func mapQuotes(allocations: [AllocationViewModel], response: YahooFinanceResponse) -> [AllocationViewModel] {
             return allocations.compactMap { allocation in
-                guard let result = response.quoteResponse.result.first(where: { $0.symbol == allocation.name })
+                guard let result = response.quoteResponse.quotes.first(
+                    where: {
+                        $0.symbol.lowercased() == allocation.name.lowercased()
+                    }
+                )
                 else { return allocation }
                 return AllocationViewModel(
                     name: allocation.name,
@@ -73,8 +83,8 @@ extension PortfolioScene {
             let newAllocations: [AllocationViewModel] = allocations.map { allocation in
 //                let otherTotal = self.total - allocation.value
 //                let otherPercentage = 100 - allocation.targetPercentage
-//                let difference = (otherTotal / otherPercentage) * allocation.targetPercentage
-                let difference = self.total * (allocation.targetPercentage/100) - allocation.value
+//                let difference = (otherTotal / otherPercentage) * allocation.targetPercentage - allocation.value
+                let difference = allocation.value - self.total * (allocation.targetPercentage/100)
                 return AllocationViewModel(
                     name: allocation.name,
                     targetPercentage: allocation.targetPercentage,
@@ -132,7 +142,7 @@ extension PortfolioScene {
         public var formattedDifference: String {
             guard let difference = difference as? NSNumber,
                   let formattedDifference = NumberFormatter.currency.string(from: difference)
-            else { return "-" }
+            else { return "" }
             return formattedDifference
         }
     }
