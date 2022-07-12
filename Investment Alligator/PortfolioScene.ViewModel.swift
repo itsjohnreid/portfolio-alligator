@@ -81,10 +81,10 @@ extension PortfolioScene {
         
         func mapDifferences() {
             let newAllocations: [AllocationViewModel] = allocations.map { allocation in
-//                let otherTotal = self.total - allocation.value
-//                let otherPercentage = 100 - allocation.targetPercentage
-//                let difference = (otherTotal / otherPercentage) * allocation.targetPercentage - allocation.value
-                let difference = allocation.value - self.total * (allocation.targetPercentage/100)
+                let otherTotal = self.total - allocation.value
+                let otherPercentage = 100 - allocation.targetPercentage
+                let difference = (otherTotal / otherPercentage) * allocation.targetPercentage - allocation.value
+//                let difference = allocation.value - self.total * (allocation.targetPercentage/100)
                 return AllocationViewModel(
                     name: allocation.name,
                     targetPercentage: allocation.targetPercentage,
