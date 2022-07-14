@@ -1,8 +1,8 @@
 # Investment Alligator
 
-## An iOS app for tracking and allocating stocks in your investment portfolio.
+An iOS app for tracking and allocating stocks in your investment portfolio.
 
-## TODO
+## To do:
 * Refactor allocation model
 * New allocation add flow
 * Fetch stock info button
