@@ -41,11 +41,12 @@ extension PortfolioScene {
         
         func deleteAllocation(at offsets: IndexSet) {
             allocations.remove(atOffsets: offsets)
+            mapVariations()
         }
         
         func fetchRequest() {
             YahooFinanceService.publisher(request: request)
-                .map { self.mapQuotes(allocations: self.allocations, response: $0) }
+                .map { self.mapQuotes(response: $0) }
                 .receive(on: DispatchQueue.main)
                 .sink { completion in
                     switch completion {
@@ -56,14 +57,14 @@ extension PortfolioScene {
                     }
                 } receiveValue: {
                     self.allocations = $0
-                    self.mapDifferences()
+                    self.mapVariations()
                 }
                 .store(in: &subscribers)
         }
         
-        func mapQuotes(allocations: [Allocation], response: YahooFinanceResponse) -> [Allocation] {
+        func mapQuotes(response: YahooFinanceResponse) -> [Allocation] {
             return allocations.compactMap { allocation in
-                guard let result = response.quoteResponse.quotes.first(
+                guard let quote = response.quoteResponse.quotes.first(
                     where: {
                         $0.symbol.lowercased() == allocation.name.lowercased()
                     }
@@ -73,24 +74,24 @@ extension PortfolioScene {
                     name: allocation.name,
                     targetPercentage: allocation.targetPercentage,
                     units: allocation.units,
-                    price: result.regularMarketPrice,
-                    difference: allocation.difference
+                    quote: quote,
+                    variation: allocation.variation
                 )
             }
         }
         
-        func mapDifferences() {
+        func mapVariations() {
             let newAllocations: [Allocation] = allocations.map { allocation in
                 let otherTotal = self.total - allocation.value
                 let otherPercentage = 100 - allocation.targetPercentage
-                let difference = (otherTotal / otherPercentage) * allocation.targetPercentage - allocation.value
-//                let difference = allocation.value - self.total * (allocation.targetPercentage/100)
+                let variation = (otherTotal / otherPercentage) * allocation.targetPercentage - allocation.value
+//                let variation = allocation.value - self.total * (allocation.targetPercentage/100)
                 return Allocation(
                     name: allocation.name,
                     targetPercentage: allocation.targetPercentage,
                     units: allocation.units,
-                    price: allocation.price,
-                    difference: difference
+                    quote: allocation.quote,
+                    variation: .init(amount: variation)
                 )
             }
             allocations = newAllocations
@@ -100,26 +101,45 @@ extension PortfolioScene {
     class Allocation: Identifiable {
         var name: String
         var targetPercentage: Decimal
-        var units: Int
-        var price: Decimal?
-        var difference: Decimal?
+        var units: Int?
+        var quote: Quote?
+        var variation: Variation?
+        
+        enum Variation {
+            case over(amount: Decimal)
+            case under(amount: Decimal)
+            case equal
+            case none
+            
+            init (amount: Decimal) {
+                if amount > 0 {
+                    self = .over(amount: amount)
+                } else if amount < 0 {
+                    self = .under(amount: abs(amount))
+                } else {
+                    self = .equal
+                }
+            }
+        }
         
         public init(
             name: String,
-            targetPercentage: Decimal,
-            units: Int,
-            price: Decimal? = nil,
-            difference: Decimal? = nil
+            targetPercentage: Decimal = 0,
+            units: Int? = nil,
+            quote: Quote? = nil,
+            variation: Variation? = nil
         ) {
             self.name = name
             self.targetPercentage = targetPercentage
             self.units = units
-            self.price = price
-            self.difference = difference
+            self.quote = quote
+            self.variation = variation
         }
         
         public var value: Decimal {
-            guard let price = price else {
+            guard let price = quote?.regularMarketPrice,
+                  let units = units
+            else {
                 return 0
             }
             return price * Decimal(units)
@@ -131,19 +151,6 @@ extension PortfolioScene {
         
         public var formattedTargetPercentage: String {
             (NumberFormatter.decimal.string(from: targetPercentage as NSNumber) ?? "") + "%"
-        }
-        
-        public var formattedValue: String {
-            guard let formattedValue = NumberFormatter.currency.string(from: value as NSNumber)
-            else { return "-" }
-            return formattedValue
-        }
-        
-        public var formattedDifference: String {
-            guard let difference = difference as? NSNumber,
-                  let formattedDifference = NumberFormatter.currency.string(from: difference)
-            else { return "" }
-            return formattedDifference
         }
     }
 }

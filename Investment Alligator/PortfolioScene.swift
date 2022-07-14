@@ -99,13 +99,13 @@ struct PortfolioScene: View {
                 name: Text(allocation.formattedName)
                     .bold(),
                 target: Text(allocation.formattedTargetPercentage),
-                units: Text(String(allocation.units)),
-                value: Text(allocation.formattedValue)
+                units: Text(String(allocation.units ?? 0)),
+                value: Text(allocation.value.currencyString)
                 )
             Spacer()
             HStack {
                 Spacer()
-                differenceText(allocation.formattedDifference)
+                differenceText(allocation.variation)
             }
         }
     }
@@ -136,17 +136,22 @@ struct PortfolioScene: View {
     }
     
     @ViewBuilder
-    func differenceText(_ string: String) -> some View {
-        if string == "" {
-            EmptyView()
-        } else if string.hasPrefix("-") {
-            Text("\(String(string.dropFirst(1))) under")
-                .bold()
-                .foregroundColor(Color.orange)
-        } else {
-            Text("\(string) over")
+    func differenceText(_ variation: Allocation.Variation?) -> some View {
+        switch variation {
+        case .over(let amount):
+            Text("\(amount.currencyString) over")
                 .bold()
                 .foregroundColor(Color.blue)
+        case .under(let amount):
+            Text("\(amount.currencyString) under")
+                .bold()
+                .foregroundColor(Color.orange)
+        case .equal:
+            Text("On target!")
+                .bold()
+                .foregroundColor(Color.green)
+        default:
+            EmptyView()
         }
     }
 }

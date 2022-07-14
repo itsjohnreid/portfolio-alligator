@@ -24,3 +24,11 @@ extension NumberFormatter {
         return formatter
     }
 }
+
+extension Decimal {
+    public var currencyString: String {
+        guard let formattedValue = NumberFormatter.currency.string(from: self as NSNumber)
+        else { return "" }
+        return formattedValue
+    }
+}

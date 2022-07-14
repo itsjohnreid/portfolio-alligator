@@ -7,6 +7,8 @@
 
 import Foundation
 
+typealias Quote = YahooFinanceResponse.QuoteResponse.Quote
+
 struct YahooFinanceResponse: Decodable {
     
     let quoteResponse: QuoteResponse
