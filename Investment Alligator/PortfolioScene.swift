@@ -93,7 +93,7 @@ struct PortfolioScene: View {
         )
     }
     
-    func allocationRow(_ allocation: AllocationViewModel) -> some View {
+    func allocationRow(_ allocation: Allocation) -> some View {
         VStack {
             row(
                 name: Text(allocation.formattedName)

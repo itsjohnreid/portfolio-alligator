@@ -14,7 +14,7 @@ extension PortfolioScene {
         
         private var subscribers: Set<AnyCancellable> = []
         
-        @Published var allocations: [AllocationViewModel] = []
+        @Published var allocations: [Allocation] = []
         
         var total: Decimal {
             return allocations.compactMap{ $0.value }.reduce(0, +)
@@ -30,7 +30,7 @@ extension PortfolioScene {
         
         func addAllocation(name: String, targetPercentage: Decimal, units: Int) {
             allocations.append(
-                AllocationViewModel(
+                Allocation(
                     name: name,
                     targetPercentage: targetPercentage,
                     units: units
@@ -45,7 +45,7 @@ extension PortfolioScene {
         
         func fetchRequest() {
             YahooFinanceService.publisher(request: request)
-                .map { Self.mapQuotes(allocations: self.allocations, response: $0) }
+                .map { self.mapQuotes(allocations: self.allocations, response: $0) }
                 .receive(on: DispatchQueue.main)
                 .sink { completion in
                     switch completion {
@@ -61,7 +61,7 @@ extension PortfolioScene {
                 .store(in: &subscribers)
         }
         
-        static func mapQuotes(allocations: [AllocationViewModel], response: YahooFinanceResponse) -> [AllocationViewModel] {
+        func mapQuotes(allocations: [Allocation], response: YahooFinanceResponse) -> [Allocation] {
             return allocations.compactMap { allocation in
                 guard let result = response.quoteResponse.quotes.first(
                     where: {
@@ -69,7 +69,7 @@ extension PortfolioScene {
                     }
                 )
                 else { return allocation }
-                return AllocationViewModel(
+                return Allocation(
                     name: allocation.name,
                     targetPercentage: allocation.targetPercentage,
                     units: allocation.units,
@@ -80,12 +80,12 @@ extension PortfolioScene {
         }
         
         func mapDifferences() {
-            let newAllocations: [AllocationViewModel] = allocations.map { allocation in
+            let newAllocations: [Allocation] = allocations.map { allocation in
                 let otherTotal = self.total - allocation.value
                 let otherPercentage = 100 - allocation.targetPercentage
                 let difference = (otherTotal / otherPercentage) * allocation.targetPercentage - allocation.value
 //                let difference = allocation.value - self.total * (allocation.targetPercentage/100)
-                return AllocationViewModel(
+                return Allocation(
                     name: allocation.name,
                     targetPercentage: allocation.targetPercentage,
                     units: allocation.units,
@@ -97,7 +97,7 @@ extension PortfolioScene {
         }
     }
     
-    class AllocationViewModel: Identifiable {
+    class Allocation: Identifiable {
         var name: String
         var targetPercentage: Decimal
         var units: Int
