@@ -84,8 +84,10 @@ extension PortfolioScene {
             let newAllocations: [Allocation] = allocations.map { allocation in
                 let otherTotal = self.total - allocation.value
                 let otherPercentage = 100 - allocation.targetPercentage
-                let variation = (otherTotal / otherPercentage) * allocation.targetPercentage - allocation.value
-//                let variation = allocation.value - self.total * (allocation.targetPercentage/100)
+                let targetValue = otherPercentage == 0
+                    ? allocation.value
+                    : (otherTotal / otherPercentage) * allocation.targetPercentage
+                let variation = allocation.value - targetValue
                 return Allocation(
                     name: allocation.name,
                     targetPercentage: allocation.targetPercentage,
