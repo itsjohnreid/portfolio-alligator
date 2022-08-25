@@ -1,4 +1,4 @@
-# Investment Alligator
+# Portfolio Alligator
 
 An iOS app for allocating, tracking, and rebalancing stocks in your portfolio.
 
