@@ -9,31 +9,40 @@ import SwiftUI
 
 struct PortfolioScene: View {
     
-    @StateObject var viewModel = ViewModel()
+    @StateObject var viewModel: ViewModel
     
     @State var ticker = ""
     @State var percentage = ""
     @State var units = ""
     
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             allocationList
             bottomBar
         }
-        .navigationTitle("Investment Alligator")
+        .navigationTitle("Portfolio Alligator")
     }
     
     var allocationList: some View {
         List {
-            Section(header: header) {
+            Section {
                 labelRow
                 ForEach(viewModel.allocations) { allocation in
                     allocationRow(allocation)
                 }
                 .onDelete(perform: viewModel.deleteAllocation)
+            } header: {
+                header
+            } footer: {
+                HStack {
+                    Spacer()
+                    addAllocationButton
+                    Spacer()
+                }
             }
         }
-        .listStyle(.plain)
+        .listStyle(.grouped)
+        .background(.green)
     }
     
     var header: some View {
@@ -46,6 +55,7 @@ struct PortfolioScene: View {
                     .bold()
             }
             .font(.title3)
+            .textCase(nil)
         }
     }
     
@@ -63,7 +73,6 @@ struct PortfolioScene: View {
                     .keyboardType(.numberPad)
             }
             .textFieldStyle(.roundedBorder)
-            addAllocationButton
         }
         .padding()
         Spacer()
@@ -72,21 +81,21 @@ struct PortfolioScene: View {
     var addAllocationButton: some View {
         Button {
             viewModel.addAllocation(
-                name: ticker,
+                ticker: ticker,
                 targetPercentage: Decimal(string: percentage) ?? 0,
                 units: Int(units) ?? 0)
         } label: {
             Text("+")
                 .bold()
-                .font(.title)
-                .padding(.horizontal, 16)
+                .font(.headline)
+                .padding(.horizontal, 4)
         }
-        .buttonStyle(.automatic)
+        .buttonStyle(.bordered)
     }
     
     var labelRow: some View {
         row(
-            name: headerText("Name"),
+            ticker: headerText("Ticker"),
             target: headerText("Target"),
             units: headerText("Units"),
             value: headerText("Value")
@@ -96,7 +105,7 @@ struct PortfolioScene: View {
     func allocationRow(_ allocation: Allocation) -> some View {
         VStack {
             row(
-                name: Text(allocation.formattedName)
+                ticker: Text(allocation.formattedTicker)
                     .bold(),
                 target: Text(allocation.formattedTargetPercentage),
                 units: Text(String(allocation.units ?? 0)),
@@ -111,13 +120,13 @@ struct PortfolioScene: View {
     }
     
     func row(
-        name: Text,
+        ticker: Text,
         target: Text,
         units: Text,
         value: Text
     ) -> some View {
         HStack {
-            name
+            ticker
                 .frame(minWidth: 60, alignment: .leading)
             target
                 .frame(minWidth: 50, alignment: .leading)
@@ -158,6 +167,50 @@ struct PortfolioScene: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        PortfolioScene()
+        PortfolioScene(
+            viewModel: .init(
+                allocations: [
+                    .init(
+                        ticker: "VGS.AX",
+                        targetPercentage: 50,
+                        units: 50,
+                        quote: .init(
+                            region: nil,
+                            regularMarketPrice: 129,
+                            exchange: nil,
+                            shortName: nil,
+                            longName: nil,
+                            symbol: "VGS.AX"),
+                        variation: .over(amount: 938)
+                    ),
+                    .init(
+                        ticker: "VAS.AX",
+                        targetPercentage: 30,
+                        units: 50,
+                        quote: .init(
+                            region: nil,
+                            regularMarketPrice: 101,
+                            exchange: nil,
+                            shortName: nil,
+                            longName: nil,
+                            symbol: "VAS.AX"),
+                        variation: .under(amount: 123)
+                    ),
+                    .init(
+                        ticker: "VGE.AX",
+                        targetPercentage: 20,
+                        units: 15,
+                        quote: .init(
+                            region: nil,
+                            regularMarketPrice: 99,
+                            exchange: nil,
+                            shortName: nil,
+                            longName: nil,
+                            symbol: "VGE.AX"),
+                        variation: .under(amount: 99)
+                    )
+                ]
+            )
+        )
     }
 }

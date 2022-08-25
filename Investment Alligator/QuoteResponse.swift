@@ -15,15 +15,15 @@ struct YahooFinanceResponse: Decodable {
     
     struct QuoteResponse: Decodable {
         
-        let quotes: [Quote]
+        let quotes: [Quote]?
         
         struct Quote: Decodable {
-            let region: String
-            let regularMarketPrice: Decimal
-            let exchange: String
-            let shortName: String
-            let longName: String
-            let symbol: String
+            let region: String?
+            let regularMarketPrice: Decimal?
+            let exchange: String?
+            let shortName: String?
+            let longName: String?
+            let symbol: String?
         }
         
         private enum CodingKeys: String, CodingKey {

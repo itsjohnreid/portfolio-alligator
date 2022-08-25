@@ -12,7 +12,7 @@ struct Investment_AlligatorApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationView {
-                PortfolioScene()
+                PortfolioScene(viewModel: .init())
             }
         }
     }

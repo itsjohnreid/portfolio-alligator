@@ -1,12 +1,11 @@
 # Investment Alligator
 
-An iOS app for rebalancing, tracking, and allocating stocks in your portfolio.
+An iOS app for allocating, tracking, and rebalancing stocks in your portfolio.
 
 ## To do:
-* Refactor allocation model
+* Save data locally
 * New allocation add flow
 * Fetch stock info button
-* Save data locally
 * App icon
 * Edit allocation
 * Handle total allocation percentage of >100%

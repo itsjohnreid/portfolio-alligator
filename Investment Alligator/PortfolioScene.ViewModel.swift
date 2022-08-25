@@ -16,6 +16,10 @@ extension PortfolioScene {
         
         @Published var allocations: [Allocation] = []
         
+        public init(allocations: [Allocation] = []) {
+            self.allocations = allocations
+        }
+        
         var total: Decimal {
             return allocations.compactMap{ $0.value }.reduce(0, +)
         }
@@ -25,13 +29,13 @@ extension PortfolioScene {
         }
         
         var request: URLRequest {
-            YahooFinanceService.quoteRequest(symbols: allocations.compactMap{ $0.name })
+            YahooFinanceService.quoteRequest(symbols: allocations.compactMap{ $0.ticker })
         }
         
-        func addAllocation(name: String, targetPercentage: Decimal, units: Int) {
+        func addAllocation(ticker: String, targetPercentage: Decimal, units: Int) {
             allocations.append(
                 Allocation(
-                    name: name,
+                    ticker: ticker,
                     targetPercentage: targetPercentage,
                     units: units
                 )
@@ -64,14 +68,14 @@ extension PortfolioScene {
         
         func mapQuotes(response: YahooFinanceResponse) -> [Allocation] {
             return allocations.compactMap { allocation in
-                guard let quote = response.quoteResponse.quotes.first(
+                guard let quote = response.quoteResponse.quotes?.first(
                     where: {
-                        $0.symbol.lowercased() == allocation.name.lowercased()
+                        $0.symbol?.lowercased() == allocation.ticker.lowercased()
                     }
                 )
                 else { return allocation }
                 return Allocation(
-                    name: allocation.name,
+                    ticker: allocation.ticker,
                     targetPercentage: allocation.targetPercentage,
                     units: allocation.units,
                     quote: quote,
@@ -89,7 +93,7 @@ extension PortfolioScene {
                     : (otherTotal / otherPercentage) * allocation.targetPercentage
                 let variation = allocation.value - targetValue
                 return Allocation(
-                    name: allocation.name,
+                    ticker: allocation.ticker,
                     targetPercentage: allocation.targetPercentage,
                     units: allocation.units,
                     quote: allocation.quote,
@@ -100,8 +104,9 @@ extension PortfolioScene {
         }
     }
     
-    class Allocation: Identifiable {
-        var name: String
+    struct Allocation: Identifiable {
+        
+        var ticker: String
         var targetPercentage: Decimal
         var units: Int?
         var quote: Quote?
@@ -125,20 +130,24 @@ extension PortfolioScene {
         }
         
         public init(
-            name: String,
+            ticker: String,
             targetPercentage: Decimal = 0,
             units: Int? = nil,
             quote: Quote? = nil,
             variation: Variation? = nil
         ) {
-            self.name = name
+            self.ticker = ticker
             self.targetPercentage = targetPercentage
             self.units = units
             self.quote = quote
             self.variation = variation
         }
         
-        public var value: Decimal {
+        var id: String {
+            ticker
+        }
+        
+        var value: Decimal {
             guard let price = quote?.regularMarketPrice,
                   let units = units
             else {
@@ -147,11 +156,11 @@ extension PortfolioScene {
             return price * Decimal(units)
         }
         
-        public var formattedName: String {
-            name.components(separatedBy: ".")[0]
+        var formattedTicker: String {
+            ticker.components(separatedBy: ".")[0]
         }
         
-        public var formattedTargetPercentage: String {
+        var formattedTargetPercentage: String {
             (NumberFormatter.decimal.string(from: targetPercentage as NSNumber) ?? "") + "%"
         }
     }
