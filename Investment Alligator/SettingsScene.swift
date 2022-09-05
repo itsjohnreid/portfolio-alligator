@@ -23,17 +23,17 @@ struct SettingsScene: View {
                 .onSubmit {
                     Settings.yhFinanceApiKey = yhFinanceApiKey
                 }
-                .onAppear {
-                    yhFinanceApiKey = Settings.yhFinanceApiKey ?? ""
-                }
             }
         }
         .navigationTitle("Settings")
+        .onAppear {
+            yhFinanceApiKey = Settings.yhFinanceApiKey ?? ""
+        }
     }
     
     var apiKeyFooter: Text {
         Text("We use the **YH Finance API** for stock info. You can get a free API key here: ") +
-        Text("[financeapi.net](https://financeapi.net/pricing)")
+        Text("[https://financeapi.net](https://financeapi.net/pricing)")
     }
 }
 
