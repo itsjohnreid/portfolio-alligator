@@ -1,5 +1,5 @@
 //
-//  QuoteResponse.swift
+//  YHFinanceResponse.swift
 //  Investment Alligator
 //
 //  Created by John Reid on 21/3/2022.
@@ -7,9 +7,9 @@
 
 import Foundation
 
-typealias Quote = YahooFinanceResponse.QuoteResponse.Quote
+typealias Quote = YHFinanceResponse.QuoteResponse.Quote
 
-struct YahooFinanceResponse: Decodable {
+struct YHFinanceResponse: Decodable {
     
     let quoteResponse: QuoteResponse
     

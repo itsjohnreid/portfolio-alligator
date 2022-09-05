@@ -7,26 +7,30 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5289607927DDBA6D002012FE /* Investment_AlligatorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5289607827DDBA6D002012FE /* Investment_AlligatorApp.swift */; };
+		5289607927DDBA6D002012FE /* MainApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5289607827DDBA6D002012FE /* MainApp.swift */; };
 		5289607B27DDBA6D002012FE /* PortfolioScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5289607A27DDBA6D002012FE /* PortfolioScene.swift */; };
 		5289607D27DDBA6F002012FE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5289607C27DDBA6F002012FE /* Assets.xcassets */; };
 		5289608027DDBA6F002012FE /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5289607F27DDBA6F002012FE /* Preview Assets.xcassets */; };
 		5289608927DDBB5C002012FE /* PortfolioScene.ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5289608827DDBB5C002012FE /* PortfolioScene.ViewModel.swift */; };
+		52A5D43E28C63F72005FFFA0 /* SettingsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A5D43D28C63F72005FFFA0 /* SettingsScene.swift */; };
+		52A5D44128C64100005FFFA0 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A5D44028C64100005FFFA0 /* Settings.swift */; };
 		52E59E1127E36AF2002F8885 /* NumberFormatter+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E59E1027E36AF2002F8885 /* NumberFormatter+Extensions.swift */; };
-		52E59E1327E86B7D002F8885 /* YahooFinanceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E59E1227E86B7D002F8885 /* YahooFinanceService.swift */; };
-		52E59E1527E8769C002F8885 /* QuoteResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E59E1427E8769C002F8885 /* QuoteResponse.swift */; };
+		52E59E1327E86B7D002F8885 /* YHFinanceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E59E1227E86B7D002F8885 /* YHFinanceService.swift */; };
+		52E59E1527E8769C002F8885 /* YHFinanceResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E59E1427E8769C002F8885 /* YHFinanceResponse.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		5289607527DDBA6D002012FE /* Alligator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Alligator.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		5289607827DDBA6D002012FE /* Investment_AlligatorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Investment_AlligatorApp.swift; sourceTree = "<group>"; };
+		5289607827DDBA6D002012FE /* MainApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainApp.swift; sourceTree = "<group>"; };
 		5289607A27DDBA6D002012FE /* PortfolioScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioScene.swift; sourceTree = "<group>"; };
 		5289607C27DDBA6F002012FE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5289607F27DDBA6F002012FE /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		5289608827DDBB5C002012FE /* PortfolioScene.ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioScene.ViewModel.swift; sourceTree = "<group>"; };
+		52A5D43D28C63F72005FFFA0 /* SettingsScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScene.swift; sourceTree = "<group>"; };
+		52A5D44028C64100005FFFA0 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		52E59E1027E36AF2002F8885 /* NumberFormatter+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NumberFormatter+Extensions.swift"; sourceTree = "<group>"; };
-		52E59E1227E86B7D002F8885 /* YahooFinanceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YahooFinanceService.swift; sourceTree = "<group>"; };
-		52E59E1427E8769C002F8885 /* QuoteResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuoteResponse.swift; sourceTree = "<group>"; };
+		52E59E1227E86B7D002F8885 /* YHFinanceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YHFinanceService.swift; sourceTree = "<group>"; };
+		52E59E1427E8769C002F8885 /* YHFinanceResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YHFinanceResponse.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,14 +63,15 @@
 		5289607727DDBA6D002012FE /* Investment Alligator */ = {
 			isa = PBXGroup;
 			children = (
-				52E59E1227E86B7D002F8885 /* YahooFinanceService.swift */,
-				5289607827DDBA6D002012FE /* Investment_AlligatorApp.swift */,
-				5289607A27DDBA6D002012FE /* PortfolioScene.swift */,
-				5289607C27DDBA6F002012FE /* Assets.xcassets */,
 				5289607E27DDBA6F002012FE /* Preview Content */,
+				52A5D43F28C6402C005FFFA0 /* YHFinance */,
+				5289607C27DDBA6F002012FE /* Assets.xcassets */,
+				5289607827DDBA6D002012FE /* MainApp.swift */,
+				5289607A27DDBA6D002012FE /* PortfolioScene.swift */,
 				5289608827DDBB5C002012FE /* PortfolioScene.ViewModel.swift */,
+				52A5D43D28C63F72005FFFA0 /* SettingsScene.swift */,
+				52A5D44028C64100005FFFA0 /* Settings.swift */,
 				52E59E1027E36AF2002F8885 /* NumberFormatter+Extensions.swift */,
-				52E59E1427E8769C002F8885 /* QuoteResponse.swift */,
 			);
 			path = "Investment Alligator";
 			sourceTree = "<group>";
@@ -77,6 +82,15 @@
 				5289607F27DDBA6F002012FE /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		52A5D43F28C6402C005FFFA0 /* YHFinance */ = {
+			isa = PBXGroup;
+			children = (
+				52E59E1227E86B7D002F8885 /* YHFinanceService.swift */,
+				52E59E1427E8769C002F8885 /* YHFinanceResponse.swift */,
+			);
+			path = YHFinance;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -150,11 +164,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				5289608927DDBB5C002012FE /* PortfolioScene.ViewModel.swift in Sources */,
+				52A5D44128C64100005FFFA0 /* Settings.swift in Sources */,
+				52A5D43E28C63F72005FFFA0 /* SettingsScene.swift in Sources */,
 				52E59E1127E36AF2002F8885 /* NumberFormatter+Extensions.swift in Sources */,
 				5289607B27DDBA6D002012FE /* PortfolioScene.swift in Sources */,
-				5289607927DDBA6D002012FE /* Investment_AlligatorApp.swift in Sources */,
-				52E59E1327E86B7D002F8885 /* YahooFinanceService.swift in Sources */,
-				52E59E1527E8769C002F8885 /* QuoteResponse.swift in Sources */,
+				5289607927DDBA6D002012FE /* MainApp.swift in Sources */,
+				52E59E1327E86B7D002F8885 /* YHFinanceService.swift in Sources */,
+				52E59E1527E8769C002F8885 /* YHFinanceResponse.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -285,7 +301,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Investment Alligator/Preview Content\"";
-				DEVELOPMENT_TEAM = BMSA228Z4G;
+				DEVELOPMENT_TEAM = TUDJ9P2T3W;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -316,7 +332,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Investment Alligator/Preview Content\"";
-				DEVELOPMENT_TEAM = BMSA228Z4G;
+				DEVELOPMENT_TEAM = TUDJ9P2T3W;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

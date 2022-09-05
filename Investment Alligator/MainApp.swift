@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct Investment_AlligatorApp: App {
+struct MainApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationView {

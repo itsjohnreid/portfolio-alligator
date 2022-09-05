@@ -1,5 +1,5 @@
 //
-//  YahooFinanceRepository.swift
+//  YHFinanceService.swift
 //  Investment Alligator
 //
 //  Created by John Reid on 21/3/2022.
@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-enum YahooFinanceService {
+enum YHFinanceService {
     
     static func quoteRequest(symbols: [String]) -> URLRequest {
         let symbolString = symbols.joined(separator: ",")
@@ -24,7 +24,7 @@ enum YahooFinanceService {
         endURLPath: String,
         queryItems: [URLQueryItem]
     ) -> URLRequest {
-        let apiKey = "TQhWr8g1df8TSAa8EUHVC2CmyJA0ueKh8gRLDFEn"
+        let apiKey = Settings.yhFinanceApiKey
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
         urlComponents.host = "yfapi.net"

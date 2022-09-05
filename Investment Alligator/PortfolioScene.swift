@@ -21,6 +21,13 @@ struct PortfolioScene: View {
             bottomBar
         }
         .navigationTitle("Portfolio Alligator")
+        .toolbar {
+            NavigationLink {
+                SettingsScene()
+            } label: {
+                Image(systemName: "ellipsis.circle")
+            }
+        }
     }
     
     var allocationList: some View {

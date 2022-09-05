@@ -29,7 +29,7 @@ extension PortfolioScene {
         }
         
         var request: URLRequest {
-            YahooFinanceService.quoteRequest(symbols: allocations.compactMap{ $0.ticker })
+            YHFinanceService.quoteRequest(symbols: allocations.compactMap{ $0.ticker })
         }
         
         func addAllocation(ticker: String, targetPercentage: Decimal, units: Int) {
@@ -49,7 +49,7 @@ extension PortfolioScene {
         }
         
         func fetchRequest() {
-            YahooFinanceService.publisher(request: request)
+            YHFinanceService.publisher(request: request)
                 .map { self.mapQuotes(response: $0) }
                 .receive(on: DispatchQueue.main)
                 .sink { completion in
@@ -66,7 +66,7 @@ extension PortfolioScene {
                 .store(in: &subscribers)
         }
         
-        func mapQuotes(response: YahooFinanceResponse) -> [Allocation] {
+        func mapQuotes(response: YHFinanceResponse) -> [Allocation] {
             return allocations.compactMap { allocation in
                 guard let quote = response.quoteResponse.quotes?.first(
                     where: {
